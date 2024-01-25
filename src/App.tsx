@@ -22,7 +22,7 @@ const router = createBrowserRouter([
     path: "*",
     element: <PageNotFound />
   }
-]);
+] , {basename : '/user-directory'});
 
 function App() {
 
