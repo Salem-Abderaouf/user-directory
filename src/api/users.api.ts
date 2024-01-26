@@ -1,15 +1,8 @@
 import { AxiosError } from "axios";
 import api from "../config/api"
+import { Users } from "../types/types";
 
-/**
- * Fetch users from the API.
- * 
- * @param {number} page - The page number 
- * @param {number} usersPerPage - Number of users per page
- * @returns {Promise<User[]>}  Promise resolving to array of User objects
-*/
-
-export const getUsers = async (page=1, usersPerPage = 10) => {
+export const getUsers = async (page:number=1, usersPerPage:number = 10): Promise<Users[] | null> => {
     try {
         const response = await api.get('/api',{
             params: {
@@ -23,11 +16,6 @@ export const getUsers = async (page=1, usersPerPage = 10) => {
         return null;
     }
 }
-
-/**
- * Handle API errors - Log errors and potentially send to error monitoring service
- * @param {AxiosError} error - The Axios error object
- */
 
 const handleApiError = (error:AxiosError):void => {
     if (error.response) {
