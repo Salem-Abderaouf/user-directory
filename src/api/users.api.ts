@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import api from "../config/api"
 import { Users } from "../types/types";
 
-export const getUsers = async (page:number=1, usersPerPage:number = 10): Promise<Users[] | null> => {
+export const getUsers = async (page:number=1, usersPerPage:number = 10): Promise<Users | null> => {
     try {
         const response = await api.get('/api',{
             params: {
