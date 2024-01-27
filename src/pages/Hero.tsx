@@ -12,6 +12,7 @@ import { searchUsers } from '../service/user.service';
 
 function Hero() {
 
+  // NOTE : using useState instead of global state manager because I don't need to manage a complex state
   const [isLoading,setIsLoading]=useState<boolean>(false);
   const [users,setUsers]=useState<Users | null>(null);
   const [originalUsers,setOriginalUsers]=useState<Users | null>(null);
@@ -33,19 +34,20 @@ function Hero() {
       const usersResponse = await getUsers(page,usersPerPage);
       setUsers(usersResponse);
       setOriginalUsers(usersResponse);
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
       toast.error('Error fetching users, please try again later.');
       console.error('Error fetching users:');
+    }
+    finally{
+      setIsLoading(false);
     }
   }
   
   const handleSearch = (query:string) => {
     if(!query) return setUsers(originalUsers);
     // When search in back-end, need to debounce
-    const filtered = users && searchUsers(users, query, filters);
-    setUsers(filtered);
+    const filteredUsers = users && searchUsers(users, query, filters);
+    setUsers(filteredUsers);
   };
 
   return (
