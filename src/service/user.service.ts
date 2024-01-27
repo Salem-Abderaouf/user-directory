@@ -1,32 +1,43 @@
-import { Users , Filters } from "../types/types";
+import { Users , Filters, User } from "../types/types";
 
 export function searchUsers(users : Users, query:string, filters : Filters) {
-
+    const lowercasedQuery = query.toLowerCase();
     let filteredUsers = users.results;
-    switch(true) {
-        
-        case filters.email:
-        filteredUsers = filteredUsers.filter(user => 
-            user.email.toLowerCase().indexOf(query.toLowerCase()) !== -1
-        );
-        break;
-
-        case filters.phone:
-        filteredUsers = filteredUsers.filter(user =>
-            user.phone.includes(query)
-        );
-        break;
-        
-        default:
-        filteredUsers = filteredUsers.filter(user => 
-            user.name.first.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-            user.name.last.toLowerCase().indexOf(query.toLowerCase()) !== -1
-        );
+    
+    if (filters.email && filters.phone) {
+        filteredUsers = filterUsersByEmailAndPhone(filteredUsers, lowercasedQuery, query);
+    } else if (filters.email) {
+        filteredUsers = filterUsersByEmail(filteredUsers, lowercasedQuery);
+    } else if (filters.phone) {
+        filteredUsers = filterUsersByPhone(filteredUsers, query);
+    } else {
+        filteredUsers = filterUsersByName(filteredUsers, lowercasedQuery);
     }
 
     return {
         results: filteredUsers,
         info: users.info
     };
+}
 
+function filterUsersByEmail(users: User[], query: string): User[] {
+    return users.filter((user) => user.email.toLowerCase().includes(query));
+}
+
+function filterUsersByPhone(users: User[], query: string): User[] {
+    return users.filter((user) => user.phone.trim().includes(query));
+}
+
+function filterUsersByEmailAndPhone(users: User[], emailQuery: string,phoneQuery : string): User[] {
+    return users.filter((user) =>
+        user.email.toLowerCase().includes(emailQuery) || user.phone.trim().includes(phoneQuery)
+    );
+}
+
+const filterUsersByName = (users : User[], query:string):User[] => {
+    return users.filter(
+        (user) =>
+            user.name.first.toLowerCase().includes(query) ||
+            user.name.last.toLowerCase().includes(query)
+    );
 }
