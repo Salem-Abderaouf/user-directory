@@ -14,7 +14,7 @@ const Pagination : React.FC<PaginationProps> = ({ page, setPage }) => {
     const pageNumbers = Array.from({ length: 5 }, (_, index) => page + index - 2).filter((pageNumber) => pageNumber > 0);
 
     return (
-        <div className="flex items-center justify-between my-6 pb-6">
+        <div className="flex items-center justify-between my-6 pb-6 max-w-[880px] mx-auto">
             <button 
             disabled={page===1}
             onClick={()=>handlePagination("previous")}
